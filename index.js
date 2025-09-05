@@ -38,9 +38,10 @@ const app = express()
 
 
 
-app.get("/health", async () => {
-    console.log("app working")
-})
+app.get("/health", async (req, res) => {
+    console.log("app working");
+    res.send("Server is healthy ✅");
+});
 
 app.listen(4444, () => {
     console.log("server running")
