@@ -1,7 +1,0 @@
-services:
-  - type: web
-    name: youtube-search-worker
-    env: node
-    plan: free
-    buildCommand: npm install
-    startCommand: npm start

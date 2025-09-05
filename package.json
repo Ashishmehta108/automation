@@ -1,16 +1,13 @@
 {
   "name": "pdeplou",
   "version": "1.0.0",
-  "description": "",
+  "description": "YouTube search automation with Puppeteer",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "postinstall": "echo 'Chromium cache ready!'"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "chrome-aws-lambda": "^10.1.0",
     "puppeteer": "^24.19.0"
   }
 }
