@@ -3,7 +3,7 @@ const puppeteer = require("puppeteer");
 (async () => {
     const browser = await puppeteer.launch({
         executablePath: "/opt/render/.cache/puppeteer/chrome/linux-140.0.7339.80/chrome-linux64/chrome",
-        headless: false, // change to false if you want to see browser
+        headless: true, // change to false if you want to see browser
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
