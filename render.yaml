@@ -1,0 +1,10 @@
+services:
+  - type: worker # or "web" if you want it to be accessible via HTTP
+    name: puppeteer-youtube
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
+        value: "false"
