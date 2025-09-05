@@ -1,6 +1,6 @@
 services:
-  - type: web
-    name: puppeteer-youtube
+  - type: worker
+    name: youtube-search-worker
     env: node
     plan: free
     buildCommand: npm install
