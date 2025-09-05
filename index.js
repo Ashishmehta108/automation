@@ -1,7 +1,5 @@
 const puppeteer = require("puppeteer");
-const express = require("express")
 
-const app = express()
 
     (async () => {
         const browser = await puppeteer.launch({
@@ -37,12 +35,3 @@ const app = express()
     })();
 
 
-
-app.get("/health", async (req, res) => {
-    console.log("app working");
-    res.send("Server is healthy ✅");
-});
-
-app.listen(4444, () => {
-    console.log("server running")
-})
