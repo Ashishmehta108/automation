@@ -1,44 +1,41 @@
 const puppeteer = require("puppeteer");
-const fs = require("fs");
 
 (async () => {
-    // 1. Load data from file (CSV simple split)
-    const data = fs.readFileSync("test.csv", "utf8").trim().split("\n");
-
     const browser = await puppeteer.launch({
-        // if running locally, you can remove `executablePath`
-        executablePath: "/usr/bin/google-chrome", // works on Render if Chrome is installed
+        headless: true, // change to false if you want to see browser
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
-        headless: true,
     });
 
     const page = await browser.newPage();
 
-    for (let i = 1; i < data.length; i++) { // skip header row
-        const [mobile, description] = data[i].split(",");
+    // 1. Go to YouTube
+    await page.goto("https://www.youtube.com/", { waitUntil: "networkidle2" });
 
-        if (!mobile || !description) continue; // skip empty lines
+    // 2. Type search query into input
+    const query = "puppeteer tutorial";
+    await page.type("input.yt-searchbox-input", query);
 
-        // 2. Open form page
-        await page.goto("https://example.com/form", { waitUntil: "networkidle2" });
+    // 3. Press Enter
+    await page.keyboard.press("Enter");
 
-        // 3. Fill form
-        await page.type("textarea[class='pledge-input']", description.trim());
-        await page.type("input[class='phone-input']", mobile.trim());
+    // 4. Wait for results
+    await page.waitForSelector("ytd-video-renderer", { timeout: 10000 });
 
-        // Check the "terms" checkbox if not already checked
-        const checkbox = await page.$("input[id='terms']");
-        if (checkbox) {
-            const isChecked = await (await checkbox.getProperty("checked")).jsonValue();
-            if (!isChecked) await checkbox.click();
-        }
+    // 5. Extract first 5 video titles + links
+    const results = await page.evaluate(() => {
+        const videos = [];
+        document.querySelectorAll("ytd-video-renderer").forEach((el, i) => {
+            if (i < 5) {
+                const title = el.querySelector("#video-title")?.innerText || "No title";
+                const url = el.querySelector("#video-title")?.href || "No link";
+                videos.push({ title, url });
+            }
+        });
+        return videos;
+    });
 
-        // 4. Submit form
-        await page.click(".submit-btn");
-
-        // 5. Wait a little before next submission
-        await new Promise((res) => setTimeout(res, 4000));
-    }
+    console.log("🔎 Search Results:");
+    console.table(results);
 
     await browser.close();
 })();
